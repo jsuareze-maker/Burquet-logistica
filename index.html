@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paella Burquet — Logística</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rojo: #8B1A1A;
+    --rojo-vivo: #C0392B;
+    --dorado: #D4A843;
+    --negro: #0F0F0F;
+    --gris-oscuro: #1A1A1A;
+    --gris-medio: #2A2A2A;
+    --gris-borde: #333;
+    --blanco: #F5F0EB;
+    --verde: #27AE60;
+    --naranja: #E67E22;
+    --azul: #2980B9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  /* LOGIN */
+  .login-overlay {
+    position: fixed; inset: 0;
+    background: var(--negro);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; padding: 24px;
+  }
+  .login-box {
+    width: 100%; max-width: 340px;
+    background: var(--gris-medio);
+    border: 1px solid var(--gris-borde);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+  }
+  .login-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--dorado);
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  .login-logo span { color: var(--rojo-vivo); }
+  .login-sub {
+    font-size: 12px;
+    color: #666;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .login-label {
+    font-size: 13px;
+    color: #888;
+    text-align: left;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .login-input {
+    width: 100%;
+    background: var(--gris-oscuro);
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    color: var(--blanco);
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .login-input:focus { border-color: var(--dorado); }
+  .login-input.error { border-color: var(--rojo-vivo); animation: shake 0.3s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+  }
+  .login-btn {
+    width: 100%;
+    background: var(--rojo);
+    color: var(--blanco);
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .login-btn:hover { background: var(--rojo-vivo); }
+  .login-error {
+    font-size: 12px;
+    color: var(--rojo-vivo);
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  /* APP */
+  .app { display: none; }
+  .app.visible { display: block; }
+
+  /* HEADER */
+  .header {
+    background: var(--gris-oscuro);
+    border-bottom: 2px solid var(--rojo);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--dorado); letter-spacing: 2px; }
+  .header-logo span { color: var(--rojo-vivo); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-fecha { font-size: 13px; color: #888; text-align: right; }
+  .header-fecha strong { color: var(--blanco); display: block; font-size: 15px; }
+  .btn-salir {
+    background: transparent;
+    border: 1px solid var(--gris-borde);
+    color: #666;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-salir:hover { color: var(--blanco); border-color: #666; }
+
+  /* TABS */
+  .tabs { display: flex; background: var(--gris-oscuro); border-bottom: 1px solid var(--gris-borde); }
+  .tab { flex: 1; padding: 14px 8px; text-align: center; font-size: 13px; font-weight: 500; cursor: pointer; color: #666; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  .tab.active { color: var(--dorado); border-bottom-color: var(--dorado); background: rgba(212,168,67,0.05); }
+
+  /* VISTAS */
+  .vista { display: none; padding: 16px; }
+  .vista.active { display: block; }
+
+  /* CONTROLES */
+  .fecha-selector { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 10px; padding: 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .fecha-selector label { font-size: 13px; color: #888; white-space: nowrap; }
+  .fecha-selector input[type="date"] { background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 6px; color: var(--blanco); padding: 8px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; flex: 1; }
+  .btn-cargar { background: var(--rojo); color: var(--blanco); border: none; border-radius: 6px; padding: 8px 16px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn-cargar:hover { background: var(--rojo-vivo); }
+
+  /* RESUMEN */
+  .resumen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .resumen-card { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 10px; padding: 12px; text-align: center; }
+  .resumen-num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--dorado); line-height: 1; }
+  .resumen-label { font-size: 11px; color: #888; margin-top: 4px; }
+
+  /* CONDUCTOR SECTION */
+  .conductor-section { margin-bottom: 20px; }
+  .conductor-header { display: flex; align-items: center; justify-content: space-between; background: var(--rojo); border-radius: 10px 10px 0 0; padding: 12px 16px; }
+  .conductor-nombre { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; }
+  .conductor-count { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 3px 10px; font-size: 12px; }
+  .conductor-body { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+  .sin-asignar-header { background: var(--gris-medio); border: 2px dashed var(--gris-borde); border-radius: 10px 10px 0 0; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .sin-asignar-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #666; letter-spacing: 1px; }
+
+  /* PEDIDO CARD ADMIN */
+  .pedido-card { border-bottom: 1px solid var(--gris-borde); padding: 14px 16px; }
+  .pedido-card:last-child { border-bottom: none; }
+  .pedido-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .pedido-id { font-size: 11px; color: var(--dorado); font-weight: 600; letter-spacing: 1px; }
+  .pedido-horario { font-size: 12px; color: #888; background: var(--gris-oscuro); padding: 3px 8px; border-radius: 4px; }
+  .pedido-cliente { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .pedido-dir { font-size: 12px; color: #888; margin-bottom: 6px; line-height: 1.4; }
+  .pedido-productos { font-size: 12px; color: #aaa; margin-bottom: 8px; line-height: 1.5; }
+  .pedido-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .pedido-total { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--dorado); }
+  .estado-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .estado-PENDIENTE { background: rgba(153,153,153,0.15); color: #999; }
+  .estado-EN-CAMINO { background: rgba(41,128,185,0.2); color: var(--azul); }
+  .estado-ENTREGADO { background: rgba(39,174,96,0.2); color: var(--verde); }
+  .asignar-conductor { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .asignar-label { font-size: 11px; color: #666; }
+  .select-conductor { background: var(--gris-oscuro); border: 1px solid var(--gris-borde); color: var(--blanco); border-radius: 6px; padding: 5px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; }
+  .btn-asignar { background: var(--rojo); color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* VISTA CONDUCTOR */
+  .conductor-selector { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .conductor-selector label { font-size: 13px; color: #888; display: block; margin-bottom: 8px; }
+  .conductor-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-conductor { padding: 10px 18px; border-radius: 8px; border: 2px solid var(--gris-borde); background: var(--gris-oscuro); color: #888; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-conductor.selected { border-color: var(--dorado); color: var(--dorado); background: rgba(212,168,67,0.1); }
+
+  /* PEDIDO CONDUCTOR */
+  .pedido-conductor-card { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .pedido-conductor-top { padding: 14px 16px; border-bottom: 1px solid var(--gris-borde); }
+  .pedido-conductor-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--dorado); letter-spacing: 1px; margin-bottom: 4px; }
+  .pedido-conductor-cliente { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
+  .pedido-conductor-tel { font-size: 13px; color: var(--dorado); }
+  .pedido-conductor-tel a { color: var(--dorado); text-decoration: none; }
+  .pedido-conductor-dir { font-size: 13px; color: #aaa; margin-top: 6px; line-height: 1.4; }
+  .pedido-conductor-horario { display: inline-block; margin-top: 6px; font-size: 12px; background: var(--gris-oscuro); padding: 3px 10px; border-radius: 4px; color: #888; }
+  .pedido-conductor-items { padding: 12px 16px; border-bottom: 1px solid var(--gris-borde); background: rgba(0,0,0,0.2); }
+  .pedido-conductor-items-titulo { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .item-line { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .item-line:last-child { border-bottom: none; }
+  .pedido-conductor-footer { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .cobro-total { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--dorado); line-height: 1; }
+  .cobro-label { font-size: 11px; color: #666; margin-top: 2px; }
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-accion { padding: 8px 14px; border-radius: 8px; border: none; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .btn-mapa { background: rgba(41,128,185,0.2); color: var(--azul); border: 1px solid var(--azul); }
+  .btn-llamar { background: rgba(39,174,96,0.2); color: var(--verde); border: 1px solid var(--verde); }
+  .btn-entregar { background: var(--verde); color: white; }
+  .entregado-banner { background: rgba(39,174,96,0.1); border-top: 1px solid rgba(39,174,96,0.3); padding: 10px 16px; font-size: 12px; color: var(--verde); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .btn-paellera { background: rgba(212,168,67,0.2); color: var(--dorado); border: 1px solid var(--dorado); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* PAELLERAS */
+  .paellera-alert { background: rgba(212,168,67,0.1); border: 1px solid rgba(212,168,67,0.3); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+  .paellera-alert-titulo { font-size: 12px; font-weight: 600; color: var(--dorado); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .paellera-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(212,168,67,0.1); font-size: 13px; }
+  .paellera-item:last-child { border-bottom: none; }
+  .btn-registrar-retorno { background: var(--dorado); color: var(--negro); border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 16px; padding: 24px; width: 100%; max-width: 360px; }
+  .modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--dorado); margin-bottom: 6px; letter-spacing: 1px; }
+  .modal p { font-size: 13px; color: #888; margin-bottom: 16px; }
+  .modal input { width: 100%; background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 8px; color: var(--blanco); padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; margin-bottom: 12px; }
+  .modal-btns { display: flex; gap: 10px; }
+  .btn-modal-cancel { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--gris-borde); background: transparent; color: #888; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; }
+  .btn-modal-ok { flex: 1; padding: 10px; border-radius: 8px; border: none; background: var(--dorado); color: var(--negro); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .loading { text-align: center; padding: 40px 20px; color: #555; }
+  .loading-spinner { width: 32px; height: 32px; border: 3px solid var(--gris-borde); border-top-color: var(--rojo); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .empty { text-align: center; padding: 40px 20px; color: #555; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">Paella <span>Burquet</span></div>
+    <div class="login-sub">Sistema de Logistica</div>
+    <label class="login-label">Clave de acceso</label>
+    <input class="login-input" type="password" id="login-input" placeholder="••••••••••••"
+      onkeydown="if(event.key==='Enter') verificarClave()" />
+    <button class="login-btn" onclick="verificarClave()">Ingresar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="header">
+    <div class="header-logo">Paella <span>Burquet</span></div>
+    <div class="header-right">
+      <div class="header-fecha"><strong id="fecha-display"></strong>Logistica</div>
+      <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="cambiarTab('admin')">Admin</div>
+    <div class="tab" onclick="cambiarTab('conductor')">Conductor</div>
+    <div class="tab" onclick="cambiarTab('paelleras')">Paelleras</div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="vista active" id="vista-admin">
+    <div class="fecha-selector">
+      <label>Fecha entrega</label>
+      <input type="date" id="fecha-admin" />
+      <button class="btn-cargar" onclick="cargarPedidosAdmin()">Cargar</button>
+    </div>
+    <div class="resumen" id="resumen-admin" style="display:none">
+      <div class="resumen-card"><div class="resumen-num" id="res-total">0</div><div class="resumen-label">Pedidos</div></div>
+      <div class="resumen-card"><div class="resumen-num" id="res-asignados">0</div><div class="resumen-label">Asignados</div></div>
+      <div class="resumen-card"><div class="resumen-num" id="res-entregados">0</div><div class="resumen-label">Entregados</div></div>
+    </div>
+    <div id="admin-content"><div class="empty">Selecciona una fecha y carga los pedidos</div></div>
+  </div>
+
+  <!-- CONDUCTOR -->
+  <div class="vista" id="vista-conductor">
+    <div class="conductor-selector">
+      <label>Selecciona tu nombre</label>
+      <div class="conductor-btns" id="conductor-btns"></div>
+    </div>
+    <div class="fecha-selector">
+      <label>Fecha</label>
+      <input type="date" id="fecha-conductor" />
+      <button class="btn-cargar" onclick="cargarPedidosConductor()">Cargar</button>
+    </div>
+    <div id="conductor-content"><div class="empty">Selecciona tu nombre y carga los pedidos del dia</div></div>
+  </div>
+
+  <!-- PAELLERAS -->
+  <div class="vista" id="vista-paelleras">
+    <div class="fecha-selector">
+      <label>Ver desde</label>
+      <input type="date" id="fecha-paelleras" />
+      <button class="btn-cargar" onclick="cargarPaelleras()">Cargar</button>
+    </div>
+    <div id="paelleras-content"><div class="empty">Carga los pedidos para ver paelleras pendientes</div></div>
+  </div>
+</div>
+
+<!-- MODAL PAELLERA -->
+<div class="modal-overlay" id="modal-paellera">
+  <div class="modal">
+    <h3>Retorno Paellera</h3>
+    <p id="modal-pedido-info"></p>
+    <input type="date" id="modal-fecha-retorno" />
+    <input type="text" id="modal-num-paellera" placeholder="Numero de paellera (ej: P-01)" />
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-modal-ok" onclick="guardarRetorno()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var API_URL = "https://script.google.com/macros/s/AKfycbxEdMTBFzSYjdNLDR4TofeV_F6CdiIjNw63ziJ7TXWlK2RisQ9qOo-OZ_TqlsIKrFOo/exec";
+var CLAVE = "burquet2026";
+var CONDUCTORES = ["Jairo", "William", "Omar"];
+var pedidosAdmin = [];
+var pedidosConductor = [];
+var modalPedidoId = null;
+var conductorSeleccionado = null;
+
+// LOGIN
+function verificarClave() {
+  var input = document.getElementById("login-input");
+  var error = document.getElementById("login-error");
+  if (input.value === CLAVE) {
+    document.getElementById("login-overlay").style.display = "none";
+    document.getElementById("app").classList.add("visible");
+    init();
+  } else {
+    error.textContent = "Clave incorrecta. Intenta de nuevo.";
+    input.classList.add("error");
+    input.value = "";
+    setTimeout(function() { input.classList.remove("error"); }, 400);
+  }
+}
+
+function cerrarSesion() {
+  document.getElementById("login-overlay").style.display = "flex";
+  document.getElementById("app").classList.remove("visible");
+  document.getElementById("login-input").value = "";
+  document.getElementById("login-error").textContent = "";
+}
+
+function init() {
+  var hoy = fechaHoy();
+  document.getElementById("fecha-admin").value = hoy;
+  document.getElementById("fecha-conductor").value = hoy;
+  document.getElementById("fecha-paelleras").value = hoy;
+  document.getElementById("fecha-display").textContent = formatFecha(hoy);
+  renderConductorBtns();
+}
+
+function fechaHoy() {
+  return new Date().toISOString().substring(0, 10);
+}
+
+function formatFecha(f) {
+  if (!f) return "";
+  var p = f.split("-");
+  return p[2] + "/" + p[1] + "/" + p[0];
+}
+
+function cambiarTab(tab) {
+  var tabs = ["admin","conductor","paelleras"];
+  document.querySelectorAll(".tab").forEach(function(t, i) {
+    t.classList.toggle("active", tabs[i] === tab);
+  });
+  document.querySelectorAll(".vista").forEach(function(v) { v.classList.remove("active"); });
+  document.getElementById("vista-" + tab).classList.add("active");
+}
+
+function renderConductorBtns() {
+  var cont = document.getElementById("conductor-btns");
+  cont.innerHTML = "";
+  CONDUCTORES.forEach(function(c) {
+    var btn = document.createElement("button");
+    btn.className = "btn-conductor";
+    btn.textContent = c;
+    btn.onclick = function() {
+      conductorSeleccionado = c;
+      document.querySelectorAll(".btn-conductor").forEach(function(b) { b.classList.remove("selected"); });
+      btn.classList.add("selected");
+    };
+    cont.appendChild(btn);
+  });
+}
+
+// ADMIN
+function cargarPedidosAdmin() {
+  var fecha = document.getElementById("fecha-admin").value;
+  if (!fecha) return;
+  var cont = document.getElementById("admin-content");
+  cont.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Cargando pedidos...</div>';
+  fetch(API_URL + "?accion=pedidos&fecha=" + fecha)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      pedidosAdmin = data.pedidos || [];
+      renderAdmin(pedidosAdmin);
+    })
+    .catch(function() {
+      cont.innerHTML = '<div class="empty">Error al cargar. Verifica la conexion.</div>';
+    });
+}
+
+function renderAdmin(pedidos) {
+  var cont = document.getElementById("admin-content");
+  var res = document.getElementById("resumen-admin");
+  if (pedidos.length === 0) {
+    res.style.display = "none";
+    cont.innerHTML = '<div class="empty">No hay pedidos para esta fecha</div>';
+    return;
+  }
+  res.style.display = "grid";
+  var asignados = pedidos.filter(function(p) { return p["Conductor"]; }).length;
+  var entregados = pedidos.filter(function(p) { return p["Estado"] === "ENTREGADO"; }).length;
+  document.getElementById("res-total").textContent = pedidos.length;
+  document.getElementById("res-asignados").textContent = asignados;
+  document.getElementById("res-entregados").textContent = entregados;
+
+  var grupos = { "__sin__": [] };
+  CONDUCTORES.forEach(function(c) { grupos[c] = []; });
+  pedidos.forEach(function(p) {
+    var c = p["Conductor"] || "__sin__";
+    if (!grupos[c]) grupos[c] = [];
+    grupos[c].push(p);
+  });
+
+  var html = "";
+  if (grupos["__sin__"].length > 0) {
+    html += '<div class="conductor-section">';
+    html += '<div class="sin-asignar-header"><span class="sin-asignar-titulo">Sin asignar</span><span class="conductor-count">' + grupos["__sin__"].length + ' pedidos</span></div>';
+    html += '<div class="conductor-body">';
+    grupos["__sin__"].forEach(function(p) { html += cardAdmin(p, true); });
+    html += '</div></div>';
+  }
+  CONDUCTORES.forEach(function(c) {
+    if (grupos[c] && grupos[c].length > 0) {
+      html += '<div class="conductor-section">';
+      html += '<div class="conductor-header"><span class="conductor-nombre">' + c + '</span><span class="conductor-count">' + grupos[c].length + ' pedidos</span></div>';
+      html += '<div class="conductor-body">';
+      grupos[c].forEach(function(p) { html += cardAdmin(p, false); });
+      html += '</div></div>';
+    }
+  });
+  cont.innerHTML = html;
+}
+
+function cardAdmin(p, sinAsignar) {
+  var id = p["ID Pedido"] || "";
+  var estado = (p["Estado"] || "PENDIENTE").replace(/ /g, "-");
+  var html = '<div class="pedido-card">';
+  html += '<div class="pedido-top"><span class="pedido-id">' + id + '</span><span class="pedido-horario">' + (p["Horario"] || "") + '</span></div>';
+  html += '<div class="pedido-cliente">' + (p["Cliente"] || "") + '</div>';
+  html += '<div class="pedido-dir">📍 ' + (p["Direccion"] || "") + '</div>';
+  html += '<div class="pedido-productos">' + (p["Productos"] || "") + '</div>';
+  html += '<div class="pedido-bottom"><span class="pedido-total">$' + Number(p["Total ($)"] || 0).toLocaleString("es-CO") + '</span>';
+  html += '<span class="estado-badge estado-' + estado + '">' + (p["Estado"] || "PENDIENTE") + '</span></div>';
+  if (sinAsignar) {
+    html += '<div class="asignar-conductor"><span class="asignar-label">Asignar a:</span>';
+    html += '<select class="select-conductor" id="sel-' + id + '"><option value="">-- conductor --</option>';
+    CONDUCTORES.forEach(function(c) { html += '<option value="' + c + '">' + c + '</option>'; });
+    html += '</select>';
+    html += '<button class="btn-asignar" onclick="asignarConductor(\'' + id + '\')">Asignar</button></div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function asignarConductor(id) {
+  var sel = document.getElementById("sel-" + id);
+  var conductor = sel ? sel.value : "";
+  if (!conductor) { alert("Selecciona un conductor"); return; }
+  fetch(API_URL, { method: "POST", body: JSON.stringify({ id: id, campo: "Conductor", valor: conductor }) })
+    .then(function() {
+      for (var i = 0; i < pedidosAdmin.length; i++) {
+        if (pedidosAdmin[i]["ID Pedido"] === id) { pedidosAdmin[i]["Conductor"] = conductor; break; }
+      }
+      renderAdmin(pedidosAdmin);
+    })
+    .catch(function() { alert("Error al asignar."); });
+}
+
+// CONDUCTOR
+function cargarPedidosConductor() {
+  if (!conductorSeleccionado) { alert("Selecciona tu nombre primero"); return; }
+  var fecha = document.getElementById("fecha-conductor").value;
+  if (!fecha) return;
+  var cont = document.getElementById("conductor-content");
+  cont.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Cargando tus pedidos...</div>';
+  fetch(API_URL + "?accion=pedidos&fecha=" + fecha + "&conductor=" + encodeURIComponent(conductorSeleccionado))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      pedidosConductor = (data.pedidos || []).sort(function(a, b) {
+        return String(a["Horario"] || "").localeCompare(String(b["Horario"] || ""));
+      });
+      renderConductor(pedidosConductor);
+    })
+    .catch(function() { cont.innerHTML = '<div class="empty">Error al cargar.</div>'; });
+}
+
+function renderConductor(pedidos) {
+  var cont = document.getElementById("conductor-content");
+  if (pedidos.length === 0) {
+    cont.innerHTML = '<div class="empty">No tienes pedidos asignados para esta fecha</div>';
+    return;
+  }
+  var html = "";
+  pedidos.forEach(function(p, idx) {
+    var id = p["ID Pedido"] || "";
+    var estado = p["Estado"] || "PENDIENTE";
+    var entregado = estado === "ENTREGADO";
+    var total = Number(p["Total ($)"] || 0);
+    var productos = String(p["Productos"] || "").split("|");
+    var tel = p["Telefono"] || "";
+    var dir = encodeURIComponent((p["Direccion"] || "") + ", Bogota, Colombia");
+    var origen = encodeURIComponent("Calle 153 16-04, Bogota, Colombia");
+    var retorno = p["Retorno Paellera"] || "";
+
+    html += '<div class="pedido-conductor-card" id="card-' + id + '">';
+    html += '<div class="pedido-conductor-top">';
+    html += '<div class="pedido-conductor-num">PARADA ' + (idx+1) + ' &nbsp;•&nbsp; ' + id + '</div>';
+    html += '<div class="pedido-conductor-cliente">' + (p["Cliente"] || "") + '</div>';
+    html += '<div class="pedido-conductor-tel"><a href="tel:' + tel + '">📞 ' + tel + '</a></div>';
+    html += '<div class="pedido-conductor-dir">📍 ' + (p["Direccion"] || "") + '</div>';
+    html += '<span class="pedido-conductor-horario">⏰ ' + (p["Horario"] || "") + '</span>';
+    html += '</div>';
+
+    html += '<div class="pedido-conductor-items">';
+    html += '<div class="pedido-conductor-items-titulo">Detalle del pedido</div>';
+    productos.forEach(function(prod) {
+      prod = prod.trim();
+      if (!prod) return;
+      var partes = prod.split("x ");
+      html += '<div class="item-line"><span>' + (partes[1] || prod) + '</span><span style="color:#888">' + (partes[0] || "") + 'x</span></div>';
+    });
+    html += '</div>';
+
+    html += '<div class="pedido-conductor-footer">';
+    html += '<div><div class="cobro-total">$' + total.toLocaleString("es-CO") + '</div><div class="cobro-label">Valor a cobrar</div></div>';
+    html += '<div class="acciones">';
+    html += '<button class="btn-accion btn-mapa" onclick="window.open(\'https://www.google.com/maps/dir/' + origen + '/' + dir + '\',\'_blank\')">Ruta</button>';
+    html += '<button class="btn-accion btn-llamar" onclick="window.location=\'tel:' + tel + '\'">Llamar</button>';
+    if (!entregado) {
+      html += '<button class="btn-accion btn-entregar" onclick="marcarEntregado(\'' + id + '\')">✓ Entregado</button>';
+    }
+    html += '</div></div>';
+
+    if (entregado) {
+      html += '<div class="entregado-banner">✅ Entregado';
+      if (!retorno) {
+        html += ' &nbsp;•&nbsp; <button class="btn-paellera" onclick="abrirModalPaellera(\'' + id + '\',\'' + (p["Cliente"] || "") + '\')">Registrar retorno paellera</button>';
+      } else {
+        html += ' &nbsp;•&nbsp; 🍳 Retorno: ' + retorno;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  cont.innerHTML = html;
+}
+
+function marcarEntregado(id) {
+  fetch(API_URL, { method: "POST", body: JSON.stringify({ id: id, campo: "Estado", valor: "ENTREGADO" }) })
+    .then(function() {
+      for (var i = 0; i < pedidosConductor.length; i++) {
+        if (pedidosConductor[i]["ID Pedido"] === id) { pedidosConductor[i]["Estado"] = "ENTREGADO"; break; }
+      }
+      renderConductor(pedidosConductor);
+    })
+    .catch(function() { alert("Error. Intenta de nuevo."); });
+}
+
+// PAELLERAS
+function cargarPaelleras() {
+  var fecha = document.getElementById("fecha-paelleras").value;
+  if (!fecha) return;
+  var cont = document.getElementById("paelleras-content");
+  cont.innerHTML = '<div class="loading"><div class="loading-spinner"></div>Cargando...</div>';
+  fetch(API_URL + "?accion=pedidos&fecha=" + fecha)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var pendientes = (data.pedidos || []).filter(function(p) {
+        return p["Estado"] === "ENTREGADO" && !p["Retorno Paellera"];
+      });
+      if (pendientes.length === 0) {
+        cont.innerHTML = '<div class="empty">✅ No hay paelleras pendientes de retorno</div>';
+        return;
+      }
+      var html = '<div class="paellera-alert"><div class="paellera-alert-titulo">⚠️ ' + pendientes.length + ' paellera(s) pendiente(s)</div>';
+      pendientes.forEach(function(p) {
+        html += '<div class="paellera-item"><div><div style="font-weight:600">' + (p["Cliente"] || "") + '</div>';
+        html += '<div style="color:#888;font-size:12px">' + (p["ID Pedido"] || "") + ' • ' + (p["Fecha Entrega"] || "") + '</div></div>';
+        html += '<button class="btn-registrar-retorno" onclick="abrirModalPaellera(\'' + (p["ID Pedido"] || "") + '\',\'' + (p["Cliente"] || "") + '\')">Registrar</button></div>';
+      });
+      html += '</div>';
+      cont.innerHTML = html;
+    })
+    .catch(function() { cont.innerHTML = '<div class="empty">Error al cargar.</div>'; });
+}
+
+// MODAL
+function abrirModalPaellera(id, cliente) {
+  modalPedidoId = id;
+  document.getElementById("modal-pedido-info").textContent = "Pedido " + id + " — " + cliente;
+  document.getElementById("modal-fecha-retorno").value = fechaHoy();
+  document.getElementById("modal-num-paellera").value = "";
+  document.getElementById("modal-paellera").classList.add("active");
+}
+
+function cerrarModal() {
+  document.getElementById("modal-paellera").classList.remove("active");
+  modalPedidoId = null;
+}
+
+function guardarRetorno() {
+  if (!modalPedidoId) return;
+  var fecha = document.getElementById("modal-fecha-retorno").value;
+  var num = document.getElementById("modal-num-paellera").value;
+  if (!fecha) { alert("Selecciona la fecha de retorno"); return; }
+  var valor = fecha + (num ? " | " + num : "");
+  fetch(API_URL, { method: "POST", body: JSON.stringify({ id: modalPedidoId, campo: "Retorno Paellera", valor: valor }) })
+    .then(function() {
+      cerrarModal();
+      cargarPaelleras();
+    })
+    .catch(function() { alert("Error al guardar."); });
+}
+
+document.getElementById("modal-paellera").addEventListener("click", function(e) {
+  if (e.target === this) cerrarModal();
+});
+</script>
+</body>
+</html>
