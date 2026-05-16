@@ -10,12 +10,10 @@
     --rojo: #8B1A1A; --rojo-vivo: #C0392B; --dorado: #D4A843;
     --negro: #0F0F0F; --gris-oscuro: #1A1A1A; --gris-medio: #2A2A2A;
     --gris-borde: #333; --blanco: #F5F0EB; --verde: #27AE60;
-    --azul: #2980B9;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
 
-  /* LOGIN */
   .login-overlay { position: fixed; inset: 0; background: var(--negro); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 24px; }
   .login-box { width: 100%; max-width: 340px; background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 20px; padding: 36px 28px; text-align: center; }
   .login-logo { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--dorado); letter-spacing: 3px; margin-bottom: 4px; }
@@ -28,54 +26,44 @@
   .login-btn { width: 100%; background: var(--rojo); color: var(--blanco); border: none; border-radius: 10px; padding: 14px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; }
   .login-error { font-size: 12px; color: var(--rojo-vivo); margin-top: 10px; min-height: 18px; }
 
-  /* APP */
   .app { display: none; }
   .app.visible { display: block; }
 
-  /* HEADER */
   .header { background: var(--gris-oscuro); border-bottom: 2px solid var(--rojo); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
   .header-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--dorado); letter-spacing: 2px; }
   .header-logo span { color: var(--rojo-vivo); }
   .header-sub { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; }
   .btn-salir { background: transparent; border: 1px solid var(--gris-borde); color: #666; border-radius: 6px; padding: 5px 10px; font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
-  /* CONTENIDO */
   .contenido { padding: 20px; max-width: 700px; margin: 0 auto; }
 
-  /* ZONA UPLOAD */
-  .upload-zona { border: 2px dashed var(--gris-borde); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 20px; transition: all 0.2s; cursor: pointer; background: var(--gris-oscuro); }
+  .upload-zona { border: 2px dashed var(--gris-borde); border-radius: 16px; padding: 40px 24px; text-align: center; margin-bottom: 20px; cursor: pointer; background: var(--gris-oscuro); transition: all 0.2s; }
   .upload-zona:hover, .upload-zona.dragover { border-color: var(--dorado); background: rgba(212,168,67,0.05); }
   .upload-icono { font-size: 48px; margin-bottom: 12px; }
   .upload-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--dorado); letter-spacing: 1px; margin-bottom: 6px; }
   .upload-sub { font-size: 13px; color: #666; margin-bottom: 16px; }
   .btn-upload { background: var(--rojo); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .btn-upload:hover { background: var(--rojo-vivo); }
   input[type="file"] { display: none; }
 
-  /* AUDIO PLAYER */
   .audio-preview { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: none; }
   .audio-preview.visible { display: block; }
   .audio-nombre { font-size: 13px; color: var(--dorado); margin-bottom: 10px; font-weight: 600; }
   audio { width: 100%; border-radius: 8px; }
-  .btn-transcribir { width: 100%; background: linear-gradient(135deg, var(--dorado), #B8860B); color: var(--negro); border: none; border-radius: 10px; padding: 16px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; cursor: pointer; margin-top: 12px; transition: opacity 0.2s; }
-  .btn-transcribir:hover { opacity: 0.85; }
+  .btn-transcribir { width: 100%; background: linear-gradient(135deg, var(--dorado), #B8860B); color: var(--negro); border: none; border-radius: 10px; padding: 16px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; cursor: pointer; margin-top: 12px; }
   .btn-transcribir:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* ESTADO TRANSCRIPCION */
   .estado { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: none; text-align: center; }
   .estado.visible { display: block; }
   .estado-spinner { width: 40px; height: 40px; border: 3px solid var(--gris-borde); border-top-color: var(--dorado); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .estado-texto { font-size: 14px; color: #888; }
   .estado-texto strong { color: var(--dorado); display: block; font-size: 16px; margin-bottom: 4px; }
+  .estado-texto span { font-size: 13px; color: #888; }
 
-  /* TRANSCRIPCION */
   .transcripcion-box { background: var(--gris-medio); border: 1px solid var(--gris-borde); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: none; }
   .transcripcion-box.visible { display: block; }
   .transcripcion-titulo { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
   .transcripcion-texto { font-size: 13px; color: #aaa; line-height: 1.6; max-height: 120px; overflow-y: auto; }
 
-  /* FORMULARIO PEDIDO */
   .formulario { background: var(--gris-medio); border: 1px solid var(--dorado); border-radius: 16px; padding: 20px; margin-bottom: 20px; display: none; }
   .formulario.visible { display: block; }
   .formulario-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--dorado); letter-spacing: 1px; margin-bottom: 4px; }
@@ -83,11 +71,10 @@
 
   .campo-grupo { margin-bottom: 14px; }
   .campo-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
-  .campo-input { width: 100%; background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 8px; color: var(--blanco); padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
+  .campo-input { width: 100%; background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 8px; color: var(--blanco); padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; }
   .campo-input:focus { border-color: var(--dorado); }
   .campo-fila { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-  /* PRODUCTOS */
   .productos-seccion { margin-bottom: 16px; }
   .productos-titulo { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
   .btn-agregar-producto { background: transparent; border: 1px solid var(--gris-borde); color: #888; border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
@@ -96,21 +83,17 @@
   .producto-fila { display: grid; grid-template-columns: 1fr 60px 32px; gap: 8px; margin-bottom: 8px; align-items: center; }
   .producto-select { background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 8px; color: var(--blanco); padding: 8px 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; width: 100%; }
   .producto-cant { background: var(--gris-oscuro); border: 1px solid var(--gris-borde); border-radius: 8px; color: var(--blanco); padding: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; text-align: center; width: 100%; }
-  .btn-quitar { background: transparent; border: 1px solid var(--gris-borde); color: #666; border-radius: 6px; width: 32px; height: 36px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+  .btn-quitar { background: transparent; border: 1px solid var(--gris-borde); color: #666; border-radius: 6px; width: 32px; height: 36px; cursor: pointer; font-size: 16px; }
   .btn-quitar:hover { border-color: var(--rojo-vivo); color: var(--rojo-vivo); }
 
-  /* TOTAL */
   .total-box { background: var(--gris-oscuro); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
   .total-label { font-size: 13px; color: #888; }
   .total-valor { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--dorado); }
 
-  /* BOTONES ACCION */
   .botones-accion { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
   .btn-cancelar { background: transparent; border: 1px solid var(--gris-borde); color: #888; border-radius: 10px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; }
-  .btn-registrar { background: var(--verde); color: white; border: none; border-radius: 10px; padding: 14px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; transition: opacity 0.2s; }
-  .btn-registrar:hover { opacity: 0.85; }
+  .btn-registrar { background: var(--verde); color: white; border: none; border-radius: 10px; padding: 14px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; cursor: pointer; }
 
-  /* EXITO */
   .exito { background: rgba(39,174,96,0.1); border: 1px solid rgba(39,174,96,0.3); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 20px; display: none; }
   .exito.visible { display: block; }
   .exito-icono { font-size: 48px; margin-bottom: 12px; }
@@ -121,7 +104,6 @@
 </head>
 <body>
 
-<!-- LOGIN -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
     <div class="login-logo">Paella <span>Burquet</span></div>
@@ -132,7 +114,6 @@
   </div>
 </div>
 
-<!-- APP -->
 <div class="app" id="app">
   <div class="header">
     <div>
@@ -144,7 +125,6 @@
 
   <div class="contenido">
 
-    <!-- UPLOAD -->
     <div class="upload-zona" id="upload-zona" onclick="document.getElementById('file-input').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event)">
       <div class="upload-icono">🎙️</div>
       <div class="upload-titulo">Subir Grabación</div>
@@ -153,26 +133,22 @@
     </div>
     <input type="file" id="file-input" accept=".mp3,.wav,.m4a,.ogg" onchange="archivoSeleccionado(event)" />
 
-    <!-- AUDIO PREVIEW -->
     <div class="audio-preview" id="audio-preview">
       <div class="audio-nombre" id="audio-nombre"></div>
       <audio id="audio-player" controls></audio>
       <button class="btn-transcribir" id="btn-transcribir" onclick="transcribir()">Transcribir y Extraer Pedido</button>
     </div>
 
-    <!-- ESTADO -->
     <div class="estado" id="estado">
       <div class="estado-spinner"></div>
       <div class="estado-texto"><strong id="estado-titulo">Procesando...</strong><span id="estado-desc">Esto puede tomar unos segundos</span></div>
     </div>
 
-    <!-- TRANSCRIPCION -->
     <div class="transcripcion-box" id="transcripcion-box">
       <div class="transcripcion-titulo">Transcripción de la llamada</div>
       <div class="transcripcion-texto" id="transcripcion-texto"></div>
     </div>
 
-    <!-- FORMULARIO -->
     <div class="formulario" id="formulario">
       <div class="formulario-titulo">Datos del Pedido</div>
       <div class="formulario-sub">Revisa y corrige si es necesario antes de registrar</div>
@@ -234,7 +210,6 @@
       </div>
     </div>
 
-    <!-- EXITO -->
     <div class="exito" id="exito">
       <div class="exito-icono">✅</div>
       <div class="exito-titulo">Pedido Registrado</div>
@@ -248,25 +223,23 @@
 <script>
 var CLAVE = "burquet2026";
 var API_URL = "https://script.google.com/macros/s/AKfycbxEdMTBFzSYjdNLDR4TofeV_F6CdiIjNw63ziJ7TXWlK2RisQ9qOo-OZ_TqlsIKrFOo/exec";
-var ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 
 var CATALOGO = [
-  { nombre: "Paella Andaluza",    precio: 65000 },
-  { nombre: "Paella Mediterránea", precio: 65000 },
-  { nombre: "Paella Sevillana",   precio: 65000 },
-  { nombre: "Paella Flamenca",    precio: 65000 },
-  { nombre: "Paella Catalana",    precio: 54000 },
-  { nombre: "Paella Valenciana",  precio: 47000 },
-  { nombre: "Paella Vegetariana", precio: 47000 },
-  { nombre: "Tortilla Española con Chorizo", precio: 49000 },
-  { nombre: "Crème Brûlée",       precio: 12500 },
-  { nombre: "Sangría",            precio: 25000 }
+  { nombre: "Paella Andaluza",              precio: 65000 },
+  { nombre: "Paella Mediterranea",          precio: 65000 },
+  { nombre: "Paella Sevillana",             precio: 65000 },
+  { nombre: "Paella Flamenca",              precio: 65000 },
+  { nombre: "Paella Catalana",              precio: 54000 },
+  { nombre: "Paella Valenciana",            precio: 47000 },
+  { nombre: "Paella Vegetariana",           precio: 47000 },
+  { nombre: "Tortilla Espanola con Chorizo", precio: 49000 },
+  { nombre: "Creme Brulee",                 precio: 12500 },
+  { nombre: "Sangria",                      precio: 25000 }
 ];
 
 var audioBase64 = null;
 var audioMime = "audio/mpeg";
 
-// LOGIN
 function verificarClave() {
   var input = document.getElementById("login-input");
   if (input.value === CLAVE) {
@@ -287,7 +260,6 @@ function cerrarSesion() {
   document.getElementById("login-input").value = "";
 }
 
-// DRAG & DROP
 function dragOver(e) { e.preventDefault(); document.getElementById("upload-zona").classList.add("dragover"); }
 function dragLeave(e) { document.getElementById("upload-zona").classList.remove("dragover"); }
 function drop(e) {
@@ -304,83 +276,43 @@ function archivoSeleccionado(e) {
 
 function procesarArchivo(file) {
   audioMime = file.type || "audio/mpeg";
-  var preview = document.getElementById("audio-preview");
-  var player = document.getElementById("audio-player");
-  var nombre = document.getElementById("audio-nombre");
-  nombre.textContent = "🎙️ " + file.name;
-  player.src = URL.createObjectURL(file);
-  preview.classList.add("visible");
+  document.getElementById("audio-nombre").textContent = "🎙️ " + file.name;
+  document.getElementById("audio-player").src = URL.createObjectURL(file);
+  document.getElementById("audio-preview").classList.add("visible");
   document.getElementById("upload-zona").style.display = "none";
-
-  // Convertir a base64
   var reader = new FileReader();
-  reader.onload = function(e) {
-    audioBase64 = e.target.result.split(",")[1];
-  };
+  reader.onload = function(e) { audioBase64 = e.target.result.split(",")[1]; };
   reader.readAsDataURL(file);
 }
 
-// TRANSCRIBIR
 function transcribir() {
   if (!audioBase64) { alert("Espera a que el archivo cargue completamente"); return; }
   document.getElementById("btn-transcribir").disabled = true;
-  mostrarEstado("Transcribiendo llamada...", "El AI está analizando el audio");
+  mostrarEstado("Transcribiendo llamada...", "El AI esta analizando el audio. Puede tardar 30-60 segundos.");
 
-  var prompt = "Eres un asistente que extrae información de pedidos de una empresa de paellas a domicilio llamada Paella Burquet en Bogotá, Colombia.\n\n" +
-    "Escucha esta grabación de una llamada telefónica y extrae la información del pedido.\n\n" +
-    "Responde ÚNICAMENTE con un JSON con esta estructura exacta, sin texto adicional:\n" +
-    "{\n" +
-    "  \"transcripcion\": \"transcripcion resumida de la llamada\",\n" +
-    "  \"cliente\": \"nombre completo del cliente\",\n" +
-    "  \"telefono\": \"numero de telefono\",\n" +
-    "  \"direccion\": \"direccion completa de entrega\",\n" +
-    "  \"fecha\": \"YYYY-MM-DD\",\n" +
-    "  \"horario\": \"HH:MM:00 - HH:MM:00\",\n" +
-    "  \"productos\": [\n" +
-    "    {\"nombre\": \"nombre del producto\", \"cantidad\": 1}\n" +
-    "  ],\n" +
-    "  \"pago\": \"Efectivo o Transferencia o Pagado anticipado\",\n" +
-    "  \"notas\": \"instrucciones especiales si las hay\"\n" +
-    "}\n\n" +
-    "Si no encuentras algún dato, deja el campo como string vacío. Para la fecha usa el año 2026.";
-
-  fetch(ANTHROPIC_URL, {
+  fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      messages: [{
-        role: "user",
-        content: [
-          { type: "text", text: prompt },
-          { type: "document", source: { type: "base64", media_type: audioMime, data: audioBase64 } }
-        ]
-      }]
+      accion: "transcribir",
+      audio: audioBase64,
+      mimeType: audioMime
     })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
     ocultarEstado();
-    var texto = "";
-    if (data.content && data.content.length > 0) {
-      texto = data.content.map(function(b) { return b.text || ""; }).join("");
-    }
-    // Limpiar markdown
-    var clean = texto.replace(/```json|```/g, "").trim();
-    try {
-      var pedido = JSON.parse(clean);
-      mostrarTranscripcion(pedido.transcripcion || texto);
-      llenarFormulario(pedido);
-    } catch(e) {
-      mostrarTranscripcion(texto);
-      document.getElementById("formulario").classList.add("visible");
+    if (data.ok && data.pedido) {
+      mostrarTranscripcion(data.pedido.transcripcion || "Transcripcion completada");
+      llenarFormulario(data.pedido);
+    } else {
+      alert("Error en la transcripcion: " + (data.error || "Sin respuesta"));
+      document.getElementById("btn-transcribir").disabled = false;
     }
   })
   .catch(function(err) {
     ocultarEstado();
     document.getElementById("btn-transcribir").disabled = false;
-    alert("Error al transcribir. Verifica la conexión.\n" + err.message);
+    alert("Error de conexion: " + err.message);
   });
 }
 
@@ -399,7 +331,6 @@ function mostrarTranscripcion(texto) {
   document.getElementById("transcripcion-box").classList.add("visible");
 }
 
-// LLENAR FORMULARIO
 function llenarFormulario(pedido) {
   document.getElementById("f-cliente").value = pedido.cliente || "";
   document.getElementById("f-telefono").value = pedido.telefono || "";
@@ -408,21 +339,17 @@ function llenarFormulario(pedido) {
   document.getElementById("f-direccion").value = pedido.direccion || "";
   document.getElementById("f-pago").value = pedido.pago || "";
   document.getElementById("f-notas").value = pedido.notas || "";
-
-  // Productos
   document.getElementById("productos-lista").innerHTML = "";
   if (pedido.productos && pedido.productos.length > 0) {
     pedido.productos.forEach(function(p) { agregarProducto(p.nombre, p.cantidad); });
   } else {
     agregarProducto();
   }
-
   document.getElementById("formulario").classList.add("visible");
   document.getElementById("formulario").scrollIntoView({ behavior: "smooth" });
   calcularTotal();
 }
 
-// PRODUCTOS
 function agregarProducto(nombrePreseleccionado, cantidadPreseleccionada) {
   var lista = document.getElementById("productos-lista");
   var div = document.createElement("div");
@@ -452,7 +379,7 @@ function agregarProducto(nombrePreseleccionado, cantidadPreseleccionada) {
 
   var btnQ = document.createElement("button");
   btnQ.className = "btn-quitar";
-  btnQ.innerHTML = "×";
+  btnQ.innerHTML = "x";
   btnQ.onclick = function() { lista.removeChild(div); calcularTotal(); };
 
   div.appendChild(select);
@@ -468,9 +395,7 @@ function calcularTotal() {
   filas.forEach(function(fila) {
     var select = fila.querySelector(".producto-select");
     var cant = fila.querySelector(".producto-cant");
-    var precio = parseFloat(select.value) || 0;
-    var cantidad = parseInt(cant.value) || 0;
-    total += precio * cantidad;
+    total += (parseFloat(select.value) || 0) * (parseInt(cant.value) || 0);
   });
   document.getElementById("total-display").textContent = "$" + total.toLocaleString("es-CO");
   return total;
@@ -484,24 +409,20 @@ function obtenerProductos() {
     var cant = fila.querySelector(".producto-cant");
     var precio = parseFloat(select.value) || 0;
     var cantidad = parseInt(cant.value) || 0;
-    var nombre = select.options[select.selectedIndex] ? select.options[select.selectedIndex].getAttribute("data-nombre") : "";
-    if (nombre && cantidad > 0) {
-      productos.push({ nombre: nombre, cantidad: cantidad, precio: precio });
-    }
+    var opt = select.options[select.selectedIndex];
+    var nombre = opt ? opt.getAttribute("data-nombre") : "";
+    if (nombre && cantidad > 0) productos.push({ nombre: nombre, cantidad: cantidad, precio: precio });
   });
   return productos;
 }
 
-// REGISTRAR
 function registrarPedido() {
   var cliente = document.getElementById("f-cliente").value.trim();
   var fecha = document.getElementById("f-fecha").value;
   var direccion = document.getElementById("f-direccion").value.trim();
-  if (!cliente || !fecha || !direccion) { alert("Completa al menos cliente, fecha y dirección"); return; }
-
+  if (!cliente || !fecha || !direccion) { alert("Completa al menos cliente, fecha y direccion"); return; }
   var productos = obtenerProductos();
   if (productos.length === 0) { alert("Agrega al menos un producto"); return; }
-
   var productosStr = productos.map(function(p) { return p.cantidad + "x " + p.nombre; }).join(" | ");
   var total = calcularTotal();
   var pago = document.getElementById("f-pago").value;
@@ -528,14 +449,10 @@ function registrarPedido() {
     ocultarEstado();
     document.getElementById("formulario").classList.remove("visible");
     document.getElementById("transcripcion-box").classList.remove("visible");
-    var sub = document.getElementById("exito-sub");
-    sub.textContent = cliente + " — " + productosStr + " — $" + total.toLocaleString("es-CO");
+    document.getElementById("exito-sub").textContent = cliente + " — " + productosStr + " — $" + total.toLocaleString("es-CO");
     document.getElementById("exito").classList.add("visible");
   })
-  .catch(function() {
-    ocultarEstado();
-    alert("Error al registrar. Intenta de nuevo.");
-  });
+  .catch(function() { ocultarEstado(); alert("Error al registrar. Intenta de nuevo."); });
 }
 
 function resetear() {
